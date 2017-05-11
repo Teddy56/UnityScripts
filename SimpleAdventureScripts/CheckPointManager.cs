@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class CheckPointManager : MonoBehaviour {
 
-	private GameObject returnPoint;
+	private GameObject checkPoint;
 	private GameObject player;
 /*
 	void Start() {
-		returnPoint = GameObject.FindGameObjectWithTag("CheckPoint");
+		checkPoint = GameObject.FindGameObjectWithTag("CheckPoint");
 		player = GameObject.FindGameObjectWithTag ("Player");
 	}
 */
 	public void ReturnCharacter() {
-		returnPoint = GameObject.FindGameObjectWithTag("CheckPoint");
+		checkPoint = GameObject.FindGameObjectWithTag("CheckPoint");
 		player = GameObject.FindGameObjectWithTag ("Player");
 		StartCoroutine("returnCharacter", player);
 	}
@@ -21,6 +21,6 @@ public class CheckPointManager : MonoBehaviour {
 	private IEnumerator returnCharacter(GameObject character) {
 		yield return new WaitForSeconds(1f);
 
-		character.transform.position = returnPoint.transform.position;
+		character.transform.position = checkPoint.transform.position;
 	}
 }

@@ -3,71 +3,103 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/*********************************************************************
+*・プレイヤーコントローラ
+*  CharactorContorollerコンポーネント と Rigitbodyコンポーネントをアタッチしたオブジェクトにアタッチすることで
+*  任意のキーで移動、ジャンプさせることができます.
+*  重力やジャンプ力、移動速度はInspecterタブから変更できます.
+* 
+*・操作方法 
+*  移動     : w,a,s,d または ↑,←,↓,→ 
+*  ダッシュ : 左shiftキーを押しながら移動
+*  ジャンプ : spaceキー
+**********************************************************************/
+
 public class PlayerController : MonoBehaviour {
 
+	// キャラクターコントローラ
 	private CharacterController controller;
+	// 進行方向
 	private Vector3 moveDirection;
 
+	// 重力
 	public  float gravity = 10f;
+	// ジャンプ力
 	public  float jumpPower = 10f;
+	// 移動スピード
 	private float speed;
+	// 通常移動の速さ
 	public  float walkSpeed = 5f;
+	// 走っている時の速さ
 	public  float runSpeed = 8f;
+	// 方向転換をする速さ
 	public  float rotationSpeed = 360f;
 
+	// HPバー
 	public  Slider hpBar;
+	// HP
 	private float hp;
+	// ダメージを受けているか確認するフラグ
 	private bool isDamage = false;
 
+	// ゲーム開始時の初期位置
 	Vector3 startPos = Vector3.zero;
-	Vector3 returnPoint;
-	Vector3 cameraForward = Vector3.zero;
+	// チェックポイントの位置
+	Vector3 checkPoint;
 
 	void Start () {
+		// ゲーム開始時の初期位置を保存
 		startPos = transform.position;
+		// キャラクターコントローラを設定
 		controller = GetComponent<CharacterController>();
+		// HPバーの最大値からHPを設定
 		hp = hpBar.maxValue;
-		returnPoint = transform.position;
+		// チェックポイントの位置を初期化
+		checkPoint = transform.position;
 	}
 
 	void Update () {
-		
 		charactorMove ();
 		charactorTurn ();
-
 		if(hp <= 0){
-			StartCoroutine("returnCharacter");
+			StartCoroutine("returnCheckPoint");
 		}
-		//Debug.Log (returnPoint.transform.position);
-
 	}
 
+	// プレイヤーキャラクターの移動を制御
 	void charactorMove(){
-		if (controller.isGrounded) { //地面についているか判定
+		if (controller.isGrounded) { // 地面についているか判定
+			// 重力の初期化
 			moveDirection.y = 0;
-			if (Input.GetButtonDown("Jump")) {
-				moveDirection.y = jumpPower; //ジャンプするベクトルの代入
+			// Spaceキーでジャンプ
+			if (Input.GetKey(KeyCode.Space)) {
+				moveDirection.y = jumpPower; // ジャンプするベクトルの代入
 			}
-			if (Input.GetButton("Dash")) {
+
+			// 左shiftキーを押しながら移動でダッシュ、押していないときは通常速度で移動
+			if (Input.GetKey(KeyCode.LeftShift)) {
 				speed = runSpeed;
 			} else {
 				speed = walkSpeed;
 			}
+
 		}
 
-		cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
+		// w,a,s,d または ↑,←,↓,→を押した際に移動
 		moveDirection.x = Input.GetAxis ("Horizontal") * speed;
 		moveDirection.z = Input.GetAxis ("Vertical") * speed;
-
+		/*
 		if (Input.GetButton ("Turn") == true) {
 			moveDirection.x = 0;
 			moveDirection.z = 0;
 		}
-
-		moveDirection.y -= gravity * Time.deltaTime; //重力計算
-		controller.Move(moveDirection * Time.deltaTime); //cubeを動かす処理
+*/
+		// y軸方向に重力をかける
+		moveDirection.y -= gravity * Time.deltaTime; 
+		controller.Move(moveDirection * Time.deltaTime); //キャラクターを動かす処理
 	}
 
+	// プレイヤーキャラクターの方向転換時にキャラクターを回転
 	void charactorTurn(){
 		Vector3 direction = new Vector3 (Input.GetAxis ("Horizontal"), 0, Input.GetAxis ("Vertical"));
 		if (direction.sqrMagnitude > 0.01f) {
@@ -80,8 +112,9 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
+	// Colliderを持つ他のオブジェクトに触れている間呼ばれる
 	void OnTriggerStay(Collider hit) {
-
+		/*
 		if(!isDamage){
 			if (hit.gameObject.CompareTag("Enemy") && hp > 0) {
 				hp -= 10f;
@@ -89,18 +122,21 @@ public class PlayerController : MonoBehaviour {
 				StartCoroutine("Damage", 0.5f);
 			}
 
-		}
+		}*/
 
 	}
 
+	// Colliderを持つ他のオブジェクトに触れた時に呼ばれる
 	void OnTriggerEnter(Collider hit) {
+		/*
 		if (hit.gameObject.CompareTag("FallArea")) {
 			hp = 0;
 		}
 
 		if(hit.gameObject.CompareTag("CheckPoint")){
-			returnPoint = hit.gameObject.transform.position;
+			checkPoint = hit.gameObject.transform.position;
 		}
+		*/
 
 	}
 
@@ -110,11 +146,11 @@ public class PlayerController : MonoBehaviour {
 		isDamage = false;
 	}
 
-	private IEnumerator returnCharacter() {
+	private IEnumerator returnCheckPoint() {
 		yield return new WaitForSeconds(0.1f);
 		hp = hpBar.maxValue;
 		hpBar.value = hp;
-		transform.position = returnPoint;
+		transform.position = checkPoint;
 	}
 
 }

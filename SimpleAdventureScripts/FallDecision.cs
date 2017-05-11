@@ -5,10 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class FallDecision : MonoBehaviour {
 
-	private GameObject returnPoint;
+	private GameObject checkPoint;
 
 	void Start() {
-		returnPoint = GameObject.FindGameObjectWithTag("CheckPoint");
+		checkPoint = GameObject.FindGameObjectWithTag("CheckPoint");
 	}
 
 	private void OnTriggerEnter(Collider hit) {
@@ -20,6 +20,6 @@ public class FallDecision : MonoBehaviour {
 	private IEnumerator returnCharacter(GameObject character) {
 		yield return new WaitForSeconds(1f);
 
-		character.transform.position = returnPoint.transform.position;
+		character.transform.position = checkPoint.transform.position;
 	}
 }

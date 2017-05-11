@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerFollowCamera : MonoBehaviour {
-	/*
+	
 	private GameObject player = null;
 	private Vector3 offset = Vector3.zero;
 	public  float speed = 0.5f;
@@ -23,6 +23,8 @@ public class PlayerFollowCamera : MonoBehaviour {
 		newPosition = transform.position;
 		newPosition.x = player.transform.position.x + offset.x;
 		newPosition.y = player.transform.position.y + offset.y;
+		newPosition.z = player.transform.position.z + offset.z;
+		/*
 		if(Input.GetButtonDown("CameraReset")){
 			//newPosition.y = player.transform.position.y + offset.y;
 			newPosition.z = player.transform.position.z + offset.z;
@@ -34,12 +36,13 @@ public class PlayerFollowCamera : MonoBehaviour {
 		} else {
 			distance = Vector3.zero;
 		}
-
+		*/
+		distance = Vector3.zero;
 			
 		transform.position = newPosition + distance;
 	}
-	*/
 
+	/*
 	GameObject targetObj;
 	Vector3 targetPos;
 
@@ -60,5 +63,5 @@ public class PlayerFollowCamera : MonoBehaviour {
 			// targetの位置のY軸を中心に、回転（公転）する
 			transform.RotateAround(targetPos, Vector3.up, mouseInputX * Time.deltaTime * 200f);
 		}
-	}   
+	}   */
 }
