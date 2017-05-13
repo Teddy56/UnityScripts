@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour {
 	public  float rotationSpeed = 360f;
 
 	// HPバー
-	public  Slider hpBar;
+	//public  Slider hpBar;
 	// HP
 	private float hp;
 	// ダメージを受けているか確認するフラグ
@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour {
 		// キャラクターコントローラを設定
 		controller = GetComponent<CharacterController>();
 		// HPバーの最大値からHPを設定
-		hp = hpBar.maxValue;
+		//hp = hpBar.maxValue;
 		// チェックポイントの位置を初期化
 		checkPoint = transform.position;
 	}
@@ -62,7 +62,7 @@ public class PlayerController : MonoBehaviour {
 		charactorMove ();
 		charactorTurn ();
 		if(hp <= 0){
-			StartCoroutine("returnCheckPoint");
+			//StartCoroutine("returnCheckPoint");
 		}
 	}
 
@@ -145,12 +145,13 @@ public class PlayerController : MonoBehaviour {
 		yield return new WaitForSeconds(time);
 		isDamage = false;
 	}
-
+	/*
 	private IEnumerator returnCheckPoint() {
 		yield return new WaitForSeconds(0.1f);
 		hp = hpBar.maxValue;
 		hpBar.value = hp;
 		transform.position = checkPoint;
 	}
+	*/
 
 }
